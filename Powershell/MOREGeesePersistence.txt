@@ -39,7 +39,6 @@ DELAY 1000
 
 STRING Clear-Content $env:APPDATA\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
 ENTER
-DELAY 300
 
 DELAY 1000
 STRING exit
