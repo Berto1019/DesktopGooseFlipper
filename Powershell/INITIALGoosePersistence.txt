@@ -3,7 +3,7 @@ GUI r
 DELAY 200
 STRING powershell
 ENTER
-DELAY 700
+DELAY 2000
 
 STRING $installPath = "$env:LOCALAPPDATA\Blueteeth"
 ENTER
