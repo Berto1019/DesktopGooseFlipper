@@ -27,3 +27,7 @@ Set-ItemProperty -Path "HKLM:\Software\Microsoft\Command Processor" -Name "AutoR
 Blueteamer can find reg key by checking:
 (Get-ItemProperty "HKLM:\Software\Microsoft\Command Processor").AutoRun
 
+Unregister Scheduled Task
+Unregister-ScheduledTask -TaskName "Microsoft Telemetry Sync" -TaskPath "\Microsoft\Windows\Application Experience\" -Confirm:$false
+
+
